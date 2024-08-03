@@ -6,11 +6,15 @@
 }
 
 .div {
-  background-color: grey;
+  background-color: darkgrey;
   flex-basis: 6.25%;
   min-height: 0;
   min-width: 0;
   aspect-ratio: 1 / 1;
   height: auto;
   width: 100px;
+}
+
+.dark {
+  background-color: grey;
 }

@@ -8,6 +8,10 @@ if (document.readyState === "loading" ) {
     generateGrid();
 }
 
+function assignColorClass(element) {
+    element.className += ` dark`
+}
+
 function generateGrid () {
     divContainer = document.querySelector(".div-container");
     console.log("generating")
@@ -15,6 +19,9 @@ function generateGrid () {
         for (let x = 0; x < columnCount; x++) {
             let newDiv = document.createElement("div");
             newDiv.className = `div ${y}x${x}`
+            newDiv.addEventListener("mouseover", () => {
+                assignColorClass(newDiv)
+            })
             divContainer.appendChild(newDiv);
         }
     }
