@@ -38,7 +38,9 @@ function generateGrid () {
 }
 
 function assignColorClass(element) {
-    element.className += ` dark`
+    if (!element.className.includes("dark")) {
+        element.className += ` dark`
+    }
 }
 
 function changeCellsPerSide() {
