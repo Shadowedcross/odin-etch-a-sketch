@@ -1,0 +1,16 @@
+.div-container {
+  display: flex;
+  flex-flow: wrap row;
+  background-color: red;
+  padding: 10px;
+}
+
+.div {
+  background-color: grey;
+  flex-basis: 6.25%;
+  min-height: 0;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  width: 100px;
+}
