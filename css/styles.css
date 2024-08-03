@@ -3,11 +3,12 @@
   flex-flow: wrap row;
   background-color: red;
   padding: 10px;
+  aspect-ratio: 1 / 1;
+  max-height: 95vh
 }
 
 .div {
   background-color: darkgrey;
-  flex-basis: 6.25%;
   min-height: 0;
   min-width: 0;
   aspect-ratio: 1 / 1;
