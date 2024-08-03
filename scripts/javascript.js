@@ -1,22 +1,35 @@
-let divContainer
-let cellCountButton
+let divContainer;
+let cellCountButton;
+let displayModeButton;
 let cellsPerSide = 16;
+let rgbMode = true;
+
+const CHANGE_TO_GREYSCALE_TEXT = "Change to Greyscale";
+const CHANGE_TO_RGB_TEXT = "Change to RGB";
 
 if (document.readyState === "loading" ) {
-    document.addEventListener("DOMContentLoaded", initialize)
+    document.addEventListener("DOMContentLoaded", initialize);
 
 } else {
-    initialize()
+    initialize();
 }
 
 function initialize() {
-    setupCellCountButton()
+    setupButtons();
     generateGrid();
 }
 
-function setupCellCountButton() {
-    cellCountButton = document.querySelector(".cell-count-button")
-    cellCountButton.addEventListener("click", changeCellsPerSide)
+function setupButtons() {
+    cellCountButton = document.querySelector(".cell-count-button");
+    cellCountButton.addEventListener("click", changeCellsPerSide);
+    displayModeButton = document.querySelector(".display-mode-button");
+    displayModeButton.addEventListener("click", changeDisplayMode);
+}
+
+function changeDisplayMode() {
+    rgbMode = !rgbMode;
+    displayModeButton.textContent = rgbMode ? CHANGE_TO_GREYSCALE_TEXT : CHANGE_TO_RGB_TEXT;
+    resetGrid();
 }
 
 function generateGrid () {
@@ -27,37 +40,58 @@ function generateGrid () {
     for (let y = 0; y < cellsPerSide; y++) {
         for (let x = 0; x < cellsPerSide; x++) {
             let newDiv = document.createElement("div");
-            newDiv.className = `div ${y}x${x}`
-            newDiv.style.flexBasis = `${100 / cellsPerSide}%`
+            newDiv.className = `div ${y}x${x}`;
+            newDiv.style.flexBasis = `${100 / cellsPerSide}%`;
             newDiv.addEventListener("mouseover", () => {
-                assignColorClass(newDiv)
+                updateDivClasses(newDiv);
             })
             divContainer.appendChild(newDiv);
         }
     }
 }
 
-function assignColorClass(element) {
-    if (!element.className.includes("dark")) {
-        element.className += ` dark`
+function updateDivClasses(element){
+    if (rgbMode) {
+        let rgbArray = getRandomRgbArray();
+        element.style.backgroundColor = `rgb(${rgbArray[0]}, ${rgbArray[1]}, ${rgbArray[2]})`;
+    } else {
+        if (element.style.backgroundColor !== "black") {
+            element.style.backgroundColor = "black";
+        }
+    }
+    if (element.style.opacity < +"1.0") {
+        element.style.opacity = `${+element.style.opacity + .10}`;
     }
 }
 
-function changeCellsPerSide() {
-    let value = validateUserInput(8, 100)
+function getRandomRgbArray() {
+    let colourArray = [];
+    for (let i = 0; i < 3; i++) {
+        colourArray.push(getRandomInt(0, 255));
+    }
+    return colourArray;
+}
 
+function getRandomInt(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+}
+
+function changeCellsPerSide() {
+    let value = validateUserInput(8, 100);
     if (value) {
-        cellsPerSide = value
-        resetGrid()
-    } else {
+        cellsPerSide = value;
+        resetGrid();
     }
 }
 
 function validateUserInput(minValue, maxValue) {
     let isInputValid = false;
+    let value;
     while (!isInputValid) {
-        let error = false
-        let value = prompt("How many squares per side? (8-100):")
+        let error = false;
+        value = prompt("How many squares per side? (8-100):");
         if (value === null || value === '') {
             value = null;
             break;
@@ -65,26 +99,26 @@ function validateUserInput(minValue, maxValue) {
         if (Number.isInteger(+value)) {
             value = +value;
             if (checkIfFloat(value) || (value < minValue || value > maxValue)) {
-                error = true
+                error = true;
             }
         } else {
-            error = true
+            error = true;
         }
         if (error) {
-            alert("You entered an invalid value. Must be an integer between 8 and 100.")
-            continue
+            alert("You entered an invalid value. Must be an integer between 8 and 100.");
+            continue;
         }
-        console.log(`Finish, value: ${value}`)
-        return value
+        isInputValid = true;
     }
+    return value;
 }
 
 function checkIfFloat(value) {
-    return (Math.floor(value) !== value)
+    return (Math.floor(value) !== value);
 }
 
 function resetGrid() {
-    generateGrid()
+    generateGrid();
 }
 
 
